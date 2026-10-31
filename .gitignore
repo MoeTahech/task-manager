@@ -44,3 +44,9 @@ next-env.d.ts
 /generated
 dev.db
 dev.db-journal
+
+# tool-generated AI assistant files
+/.agents
+/.claude
+/.windsurf
+/skills-lock.json

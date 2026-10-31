@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-vi.mock("@/lib/tasks", () => ({
+vi.mock("@/lib/tasks/service", () => ({
   listTasks: vi.fn(),
   createTask: vi.fn(),
   updateTask: vi.fn(),
@@ -8,7 +8,7 @@ vi.mock("@/lib/tasks", () => ({
 }));
 
 import { PUT, DELETE } from "@/app/api/tasks/[id]/route";
-import { updateTask, deleteTask } from "@/lib/tasks";
+import { updateTask, deleteTask } from "@/lib/tasks/service";
 
 // In your route, params is a Promise, so the tests pass one too
 const ctx = (id: string) => ({ params: Promise.resolve({ id }) });

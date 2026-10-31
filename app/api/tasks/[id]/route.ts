@@ -1,26 +1,17 @@
 import { NextResponse } from "next/server";
-import { updateTask, deleteTask } from "@/lib/tasks";
-import { updateTaskSchema, readJson, formatIssues } from "@/lib/validation";
+import { updateTask, deleteTask } from "@/lib/tasks/service";
+import { updateTaskSchema } from "@/lib/tasks/schemas";
+import { parseBody } from "@/lib/http";
 
 type Context = { params: Promise<{ id: string }> };
 
 export async function PUT(request: Request, { params }: Context) {
   const { id } = await params;
 
-  const body = await readJson(request);
-  if (body === null) {
-    return NextResponse.json({ error: "invalid JSON body" }, { status: 400 });
-  }
+  const parsed = await parseBody(request, updateTaskSchema);
+  if (!parsed.ok) return parsed.response;
 
-  const result = updateTaskSchema.safeParse(body);
-  if (!result.success) {
-    return NextResponse.json(
-      { error: "validation failed", issues: formatIssues(result.error) },
-      { status: 400 }
-    );
-  }
-
-  const task = await updateTask(Number(id), result.data);
+  const task = await updateTask(Number(id), parsed.data);
   if (!task) {
     return NextResponse.json({ error: "task not found" }, { status: 404 });
   }
@@ -33,4 +24,4 @@ export async function DELETE(_request: Request, { params }: Context) {
     return NextResponse.json({ error: "task not found" }, { status: 404 });
   }
   return new NextResponse(null, { status: 204 });
-} 
+}
