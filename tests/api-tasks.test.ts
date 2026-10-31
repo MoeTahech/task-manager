@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Replace the real database layer with fakes. vi.mock is hoisted to the top of the file.
-vi.mock("@/lib/tasks", () => ({
+vi.mock("@/lib/tasks/service", () => ({
   listTasks: vi.fn(),
   createTask: vi.fn(),
   updateTask: vi.fn(),
@@ -9,7 +9,7 @@ vi.mock("@/lib/tasks", () => ({
 }));
 
 import { GET, POST } from "@/app/api/tasks/route";
-import { listTasks, createTask } from "@/lib/tasks";
+import { listTasks, createTask } from "@/lib/tasks/service";
 
 function postRequest(body: string) {
   return new Request("http://localhost/api/tasks", {

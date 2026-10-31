@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { createTaskSchema, updateTaskSchema } from "@/lib/validation";
+import { createTaskSchema, updateTaskSchema } from "@/lib/tasks/schemas";
 
 describe("createTaskSchema", () => {
   it("accepts a valid title", () => {
