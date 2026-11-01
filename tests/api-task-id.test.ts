@@ -49,6 +49,21 @@ describe("PUT /api/tasks/[id]", () => {
     expect(res.status).toBe(400);
     expect(updateTask).not.toHaveBeenCalled();
   });
+  it("updates only the title, trimmed", async () => {
+    vi.mocked(updateTask).mockResolvedValue({ id: 1, title: "New name", done: false });
+
+    const res = await PUT(putRequest(JSON.stringify({ title: "  New name  " })), ctx("1"));
+
+    expect(res.status).toBe(200);
+    expect(updateTask).toHaveBeenCalledWith(1, { title: "New name" });
+  });
+
+  it("returns 400 for a whitespace-only title and never touches the database", async () => {
+    const res = await PUT(putRequest(JSON.stringify({ title: "   " })), ctx("1"));
+
+    expect(res.status).toBe(400);
+    expect(updateTask).not.toHaveBeenCalled();
+  });
 });
 
 describe("DELETE /api/tasks/[id]", () => {
